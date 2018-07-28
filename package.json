@@ -1,0 +1,22 @@
+{
+  "name": "http-protocol",
+  "version": "1.0.0",
+  "description": "HTTP协议",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Q-Angelo/http-protocol.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Q-Angelo/http-protocol/issues"
+  },
+  "homepage": "https://github.com/Q-Angelo/http-protocol#readme"
+}
