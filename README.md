@@ -327,3 +327,431 @@ console.log('server listening on port ', port);
 第二次发送一个PUT数据请求
 
 ![](/img/cors2018072802.png)
+
+## 缓存头Cache-Control的含义和使用
+
+#### 可缓存性
+
+* public http经过的任何地方都可以进行缓存
+
+* private 只有发起请求的这个浏览器才可以进行缓存
+ 
+* no-cache 任何一个节点都不可以缓存
+
+#### 到期
+
+* max-age=<seconds> 设置缓存到多少秒过期
+
+* s-maxage=<seconds> 会代替max-age，只有在代理服务器才会生效
+
+* max-stale=<seconds> 是发起请求方主动带起的一个头，是代表即便缓存过期，但是在max-stale这个时间内还可以使用过期的缓存，而不需要愿服务器请求新的内容
+
+#### 重新验证
+
+* must-revalidate 如果max-age设置的内容过期，必须要向服务器请求重新获取数据验证内容是否过期
+
+* proxy-revalidate 主要用在缓存服务器，指定缓存服务器在过期后重新从原服务器获取，不能从本地获取
+
+#### 其它
+
+* no-store 本地和代理服务器都不可以存储这个缓存，永远都要从服务器拿body新的内容使用
+
+* no-transform 主要用于proxy服务器，告诉代理服务器不要随意改动返回的内容
+
+
+#### 示例
+
+* 先思考两个问题?
+    1. 在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？
+    2. 在使用webpack等一些打包工具时，为什么要加上一串hash码？
+
+* cache-control.html
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>cache-control</title>
+    </head>
+    <body>
+        <script src="/script.js"></script>
+    </body>
+</html>
+```
+
+* cache-control.js
+
+浏览器输入http://localhost:3010/ 加载cache-control.html文件，该文件会请求http://localhost:3010/script.js，在url等于```/script.js```设置cache-control的max-age进行浏览器缓存
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    if (request.url === '/') {
+        const html = fs.readFileSync('./example/cache/cache-control.html', 'utf-8');
+    
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+        });
+
+        response.end(html);
+    } else if (request.url === '/script.js') {
+        response.writeHead(200, {
+            'Content-Type': 'text/javascript',
+            'Cache-Control': 'max-age=200'
+        });
+
+        response.end("console.log('script load')");
+    }
+
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+* 第一次运行
+
+浏览器运行结果,没有什么问题，正常响应
+
+![](/img/cache-control2018081101.png)
+
+控制台运行结果
+
+![](/img/cache-control2018081102.png)
+
+
+* 修改cache-control.js返回值
+
+```js
+...
+response.writeHead(200, {
+    'Content-Type': 'text/javascript',
+    'Cache-Control': 'max-age=200'
+});
+
+response.end("console.log('script load ！！！')");
+...
+```
+
+* 中断上次程序，第二次运行
+
+浏览器运营结果
+
+第二次运行，从memory cahce读取，浏览器控制台并没有打印修改过的内容
+
+![](/img/cache-control2018081103.png)
+
+控制台运营结果
+
+指请求了``` / ``` 并没有请求 ``` /script.js  ```
+
+![](/img/cache-control2018081104.png)
+
+以上结果浏览器并没有返回给我们服务端修改的结果，这是为什么呢？是因为我们请求的url```/script.js```没有变，那么浏览器就不会经过服务端的验证，会直接从客户端缓存去读，就会导致一个问题，我们的js静态资源更新之后，不会立即更新到我们的客户端，这也是前端开发中常见的一个问题，我们是希望浏览器去缓存我们的静态资源文件（js、css、img等）我们也不希望服务端内容更新了之后客户端还是请求的缓存的资源， 解决办法也就是我们在做js构建流程时，把打包完成的js文件名上根据它内容hash值加上一串hash码，这样你的js文件或者css文件等内容不变，这样生成的hash码就不会变，反映到页面上就是你的url没有变，如果你的文件内容有变化那么嵌入到页面的文件url就会发生变化，这样就可以达到一个更新缓存的目的，这也是目前前端来说比较常见的一个静态资源方案。
+
+#### 资源验证
+
+如果使用cahce-control浏览器发起一个请求到缓存查找的一个过程流程图
+
+![](/img/cache-control2018081105.png)
+
+##### 验证头
+
+* Last-Modified 上次修改时间，配合If-Modified-Since或者If-Unmo dified-Since使用，对比上次修改时间以验证资源是否可用
+
+* Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
+
+## Cookie
+
+通过Set-Cookie设置，下次请求会自动带上，键值对形式可以设置多个
+
+#### cookie属性
+
+* max-age或expires设置过期时间
+
+* Secure只在https发送
+
+* httpOnly无法通过document.cookie访问
+
+#### 示例
+
+* cookie.html
+
+控制台打印输出cookie信息
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Cookie</title>
+    </head>
+    <body>
+        <script>
+            console.log(document.cookie);    
+        </script>
+    </body>
+</html>
+```
+
+* cookie.js
+
+设置两个cookie，a=111 设置过期时间2秒钟，b=222设置httpOnly
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    if (request.url === '/') {
+        const html = fs.readFileSync('./cookie.html', 'utf-8');
+    
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Set-Cookie': ['a=111;max-age=2', 'b=222; httpOnly'],
+        });
+
+        response.end(html);
+    }
+
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+* 返回结果
+
+可以看到当b=222设置了httpOnly之后，js就无法读取到该cookie值，示例中只输出了a=111
+
+![](/img/cookie2018081201.png)
+
+#### cookie的domain设置
+
+> 如果想要在一个域名的二级域名中共享同一个cookie需要做domain设置
+
+以下例子中，假设test.com是一级域名，设置一些cookie信息，同时设置domain，使得二级域名可以共享，在之后的二级域名例如 a.test.com, b.test.com访问中都可以访问到同一个cookie信息。
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    if (request.url === '/') {
+        const html = fs.readFileSync('./cookie.html', 'utf-8');
+    
+        if (request.headers.host === 'test.com') {
+            response.writeHead(200, {
+                'Content-Type': 'text/html',
+                'Set-Cookie': ['a=111;max-age=2', 'b=222; httpOnly; domain=test.com'],
+            });
+        }
+
+        response.end(html);
+    }
+
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+## http长链接
+
+> http的请求是在tcp链接之上进行发送，tcp链接分为长链接、短链接的概念，http发送请求的时候会先创建一个tcp链接，在tcp连接上把http请求的内容发送，并接收返回，这个时候一次请求就结束了，浏览器会和服务端商量，要不要把这次tcp链接给关闭到，如果不关闭，这个tcp链接就会一直开着，会有消耗，但是接下去如果还有请求，就可以直接在这个tcp链接上进行发送，那么就不需要经过三次握手这样的一个链接消耗，而如果直接关闭，那么在下次http请求的时候就需要在创建一个tcp链接，长链接是可以设置timeout的，可以设置多长时间在这个tcp连接上没有新的请求就会关闭
+
+#### http/1.1
+
+http/1.1的链接在tcp上去发送请求是有先后顺序的，例如你有10个请求是不可以并发的在一个tcp链接上去发送，浏览器是可以允许并发的创建一个tcp链接，chrome允许的是6个，一次性的并发，如果你有10个只能等前面6个其中一个完成，新的请求在进去。
+
+#### http/1.1长链接示例
+
+* connection.html
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Connection</title>
+    </head>
+    <body>
+        <img src="/test1.jpg" alt="" />
+        <img src="/test2.jpg" alt="" />
+        <img src="/test3.jpg" alt="" />
+        <img src="/test4.jpg" alt="" />
+        <img src="/test5.jpg" alt="" />
+        <img src="/test6.jpg" alt="" />
+        <img src="/test7.jpg" alt="" />
+        <img src="/test8.jpg" alt="" />
+    </body>
+</html>
+```
+
+* connection.js
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    const html = fs.readFileSync('./connection.html', 'utf-8');
+    const img = fs.readFileSync('./test_img.jpg');
+
+    if (request.url === '/') {
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+        });
+
+        response.end(html);
+    } else {
+        response.writeHead(200, {
+            'Content-Type': 'image/jpg'
+        });
+
+        response.end(img);
+    }
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+* 返回结果
+
+可以看到第一次图片加载时复用了第一次localhost的tcp链接，最后两张图片一直在等待前面的tcp链接完成，有一定的响应等待
+
+![](/img/connection2018081201.png)
+
+http/2
+
+在http/2中有了一个新的概念<strong>信道复用</strong>，在TCP连接上可以并发的去发送http请求，链接一个网站只需要一个TCP链接(同域的情况下)
+
+![]()
+
+## 数据协商
+
+```js
+// todo
+```
+
+## CSP
+
+Content-Security-Policy内容安全策略，限制资源获取
+
+[参考文档 内容安全策略 (CSP) - Web 安全 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
+
+#### 限制方式
+
+* default-src限制全局
+
+* 制定资源类型
+
+```
+connect-src manifest-src img-src style-src script-src frame-src font-src media-src ...
+```
+
+#### 参考示例
+
+> web领域非常著名的一个攻击方式xss，是通过某些方法在网站里面注入一些别人写好的脚本，窃取一些用户的信息，处于安全考虑不希望执行写在页面里面的一些脚本，可以在返回的headers里面设置Content-Security-Policy。
+
+csp.html
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>cache-control</title>
+    </head>
+    <body>
+        <script>
+            console.log('hello world!!!');    
+        </script>
+        <script src="/script.js"></script>
+    </body>
+</html>
+```
+
+csp.js
+
+在head里设置Content-Security-Policy只能加载http https
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    if (request.url === '/') {
+        const html = fs.readFileSync('csp.html', 'utf-8');
+    
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Content-Security-Policy': 'default-src http: https',
+        });
+
+        response.end(html);
+    }
+}).listen(port);
+```
+
+运行结果
+
+![](/img/csp2018081201.png)
+
+#### 更多的设置方式
+
+* 限制外链加载的javascript文件只能通过哪些域名加载
+
+> 只能根据本域名下的js内容进行加载
+
+```js
+response.writeHead(200, {
+    'Content-Security-Policy': 'default-src \'self\'',
+});
+```
+
+* 限制指定某个网站
+
+```js
+response.writeHead(200, {
+    'Content-Security-Policy': 'default-src \'self\' https://www.baidu.com/',
+});
+```
+
+* 限制form表单的提交
+
+```js
+response.writeHead(200, {
+    'Content-Security-Policy': 'default-src \'self\'; form-action \'self\'',
+});
+```
+
+* 内容安全策略如果出现我们不希望的情况，可以让它主动申请向我们服务器发送一个请求进行汇报
+
+```js
+// report-uri 跟上服务器的url地址
+response.writeHead(200, {
+    'Content-Security-Policy': 'default-src \'self\'; report-uri /report',
+});
+```
+
+* 除了在服务端通过headers指定还可以在html里面通过meta标签写
+
+> 注意：在html标签里通过meta写report-uri是不支持的，建议还用通过headers设置
+
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src http: https">
+```
+
+更多内容可参考 CSP的CDN [参考文档 内容安全策略 (CSP) - Web 安全 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
