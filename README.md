@@ -1,4 +1,18 @@
 # http-protocol
+
+## 目录
+
+* [5层网络模型介绍](#5层网络模型介绍)
+* [http协议发展历史](#http协议发展历史)
+* [http三次握手](#http三次握手)
+* [URI/URL/URN](#URI/URL/URN)
+* [跨域CORS](#跨域CORS)
+* [缓存头Cache-Control的含义和使用](#缓存头Cache-Control的含义和使用)
+* [Cookie](#Cookie)
+* [http长链接](#http长链接)
+* [数据协商](#数据协商)
+* [CSP](#CSP)
+
 HTTP协议
 
 http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送多个http请求，之前的协议版本是不可以这么做的，从http/1.1里面就可以这样做了，tcp链接对应的是多个http请求，而一个http请求肯定是在某个tcp链接里面进行发送的。
@@ -320,7 +334,7 @@ console.log('server listening on port ', port);
 
 运行结果
 
-第一次先发送了一个OPTIONS请求询问
+第一次先发送了一个OPTIONS请求询问
 
 ![](/img/cors2018072801.jpeg)
 
@@ -441,7 +455,7 @@ response.end("console.log('script load ！！！')");
 
 浏览器运营结果
 
-第二次运行，从memory cahce读取，浏览器控制台并没有打印修改过的内容
+第二次运行，从memory cahce读取，浏览器控制台并没有打印修改过的内容
 
 ![](/img/cache-control2018081103.png)
 
@@ -463,11 +477,11 @@ response.end("console.log('script load ！！！')");
 
 * Last-Modified 上次修改时间，配合If-Modified-Since或者If-Unmo dified-Since使用，对比上次修改时间以验证资源是否可用
 
-* Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
+* Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
 
 ## Cookie
 
-通过Set-Cookie设置，下次请求会自动带上，键值对形式可以设置多个
+通过Set-Cookie设置，下次请求会自动带上，键值对形式可以设置多个
 
 #### cookie属性
 
@@ -475,7 +489,7 @@ response.end("console.log('script load ！！！')");
 
 * Secure只在https发送
 
-* httpOnly无法通过document.cookie访问
+* httpOnly无法通过document.cookie访问
 
 #### 示例
 
@@ -499,7 +513,7 @@ response.end("console.log('script load ！！！')");
 
 * cookie.js
 
-设置两个cookie，a=111 设置过期时间2秒钟，b=222设置httpOnly
+设置两个cookie，a=111 设置过期时间2秒钟，b=222设置httpOnly
 
 ```js
 const http = require('http');
@@ -527,13 +541,13 @@ console.log('server listening on port ', port);
 
 * 返回结果
 
-可以看到当b=222设置了httpOnly之后，js就无法读取到该cookie值，示例中只输出了a=111
+可以看到当b=222设置了httpOnly之后，js就无法读取到该cookie值，示例中只输出了a=111
 
 ![](/img/cookie2018081201.png)
 
 #### cookie的domain设置
 
-> 如果想要在一个域名的二级域名中共享同一个cookie需要做domain设置
+> 如果想要在一个域名的二级域名中共享同一个cookie需要做domain设置
 
 以下例子中，假设test.com是一级域名，设置一些cookie信息，同时设置domain，使得二级域名可以共享，在之后的二级域名例如 a.test.com, b.test.com访问中都可以访问到同一个cookie信息。
 
@@ -565,11 +579,11 @@ console.log('server listening on port ', port);
 
 ## http长链接
 
-> http的请求是在tcp链接之上进行发送，tcp链接分为长链接、短链接的概念，http发送请求的时候会先创建一个tcp链接，在tcp连接上把http请求的内容发送，并接收返回，这个时候一次请求就结束了，浏览器会和服务端商量，要不要把这次tcp链接给关闭到，如果不关闭，这个tcp链接就会一直开着，会有消耗，但是接下去如果还有请求，就可以直接在这个tcp链接上进行发送，那么就不需要经过三次握手这样的一个链接消耗，而如果直接关闭，那么在下次http请求的时候就需要在创建一个tcp链接，长链接是可以设置timeout的，可以设置多长时间在这个tcp连接上没有新的请求就会关闭
+> http的请求是在tcp链接之上进行发送，tcp链接分为长链接、短链接的概念，http发送请求的时候会先创建一个tcp链接，在tcp连接上把http请求的内容发送，并接收返回，这个时候一次请求就结束了，浏览器会和服务端商量，要不要把这次tcp链接给关闭到，如果不关闭，这个tcp链接就会一直开着，会有消耗，但是接下去如果还有请求，就可以直接在这个tcp链接上进行发送，那么就不需要经过三次握手这样的一个链接消耗，而如果直接关闭，那么在下次http请求的时候就需要在创建一个tcp链接，长链接是可以设置timeout的，可以设置多长时间在这个tcp链接上没有新的请求就会关闭
 
 #### http/1.1
 
-http/1.1的链接在tcp上去发送请求是有先后顺序的，例如你有10个请求是不可以并发的在一个tcp链接上去发送，浏览器是可以允许并发的创建一个tcp链接，chrome允许的是6个，一次性的并发，如果你有10个只能等前面6个其中一个完成，新的请求在进去。
+http/1.1的链接在tcp上去发送请求是有先后顺序的，例如你有10个请求是不可以并发的在一个tcp链接上去发送，浏览器是可以允许并发的创建一个tcp链接，chrome允许的是6个，一次性的并发，如果你有10个只能等前面6个其中一个完成，新的请求在进去。
 
 #### http/1.1长链接示例
 
@@ -627,13 +641,13 @@ console.log('server listening on port ', port);
 
 * 返回结果
 
-可以看到第一次图片加载时复用了第一次localhost的tcp链接，最后两张图片一直在等待前面的tcp链接完成，有一定的响应等待
+可以看到第一次图片加载时复用了第一次localhost的tcp链接，最后两张图片一直在等待前面的tcp链接完成，有一定的响应等待
 
 ![](/img/connection2018081201.png)
 
 http/2
 
-在http/2中有了一个新的概念<strong>信道复用</strong>，在TCP连接上可以并发的去发送http请求，链接一个网站只需要一个TCP链接(同域的情况下)
+在http/2中有了一个新的概念<strong>信道复用</strong>，在TCP连接上可以并发的去发送http请求，链接一个网站只需要一个TCP链接(同域的情况下)
 
 ![]()
 
@@ -651,7 +665,7 @@ Content-Security-Policy内容安全策略，限制资源获取
 
 #### 限制方式
 
-* default-src限制全局
+* default-src限制全局
 
 * 制定资源类型
 
@@ -661,7 +675,7 @@ connect-src manifest-src img-src style-src script-src frame-src font-src media-s
 
 #### 参考示例
 
-> web领域非常著名的一个攻击方式xss，是通过某些方法在网站里面注入一些别人写好的脚本，窃取一些用户的信息，处于安全考虑不希望执行写在页面里面的一些脚本，可以在返回的headers里面设置Content-Security-Policy。
+> web领域非常著名的一个攻击方式xss，是通过某些方法在网站里面注入一些别人写好的脚本，窃取一些用户的信息，处于安全考虑不希望执行写在页面里面的一些脚本，可以在返回的headers里面设置Content-Security-Policy。
 
 csp.html
 
@@ -682,7 +696,7 @@ csp.html
 
 csp.js
 
-在head里设置Content-Security-Policy只能加载http https
+在head里设置Content-Security-Policy只能加载http https
 
 ```js
 const http = require('http');
@@ -704,8 +718,7 @@ http.createServer((request, response) => {
     }
 }).listen(port);
 ```
-
-运行结果
+运行结果
 
 ![](/img/csp2018081201.png)
 
