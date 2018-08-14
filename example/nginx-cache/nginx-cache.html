@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>nginx-cache</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.min.js"></script>
+    </head>
+    <body>
+        <div>
+            this is nginx-cache, and data is: <span id="data"></span>
+        </div>
+        <script>
+            fetch('/data').then((res => res.text())).then(text => {
+                document.getElementById('data').innerText = text;
+            });
+        </script>
+    </body>
+</html>

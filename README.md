@@ -768,3 +768,64 @@ response.writeHead(200, {
 ```
 
 更多内容可参考 CSP的CDN [参考文档 内容安全策略 (CSP) - Web 安全 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
+
+## Nginx安装配置
+
+> nginx出发点就是一个http的服务
+
+#### windows安装可参考以下
+
+[nginx: download](http://nginx.org/)
+
+#### Mac安装
+
+* 安装
+
+``` brew install nginx ```
+
+* 查看版本
+
+``` nginx -v ```
+
+* 安装位置
+
+``` /usr/local/etc/nginx ```
+
+* 启动
+
+``` sudo nginx  ```
+
+* 查看 nginx 是否启动成功
+
+> 在浏览器中访问 http://localhost:8080，如果出现如下界面，则说明启动成功.
+
+![](/img/nginx2018081201.png)
+
+* 关闭nginx
+
+``` sudo nginx -s stop ```
+
+* 重新加载nginx
+
+``` sudo nginx -s reload ```
+
+#### Nginx配置缓存
+
+* levels 是否要创建二级文件夹
+* keys_zone=my_cache:10m 代理缓存查找一个缓存之前要有个地方保存，一个url对应的缓存保存在哪个地方，这个关系是存在内存里的，这里要声明一个内存大小进行保存，my_cache是缓存的名字，在每个server里面可以去设置
+
+
+```conf
+proxy_cache_path /var/cache levels=1:2 keys_zone=my_cache:10m;
+
+server {
+    listen          80;
+    server_name     test.com;
+
+    location / {
+        proxy_cache my_cache;
+        proxy_pass http://127.0.0.1:3010;
+        proxy_set_header Host $host; # 设置浏览器请求的host
+    }
+}
+```
