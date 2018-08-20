@@ -3,15 +3,60 @@
 ## 目录
 
 * [5层网络模型介绍](#5层网络模型介绍)
+    * 应用层
+    * 传输层
+    * 网络层
+    * 数据链路层
+    * 物理层
+
 * [http协议发展历史](#http协议发展历史)
+    * http/0.9
+    * http/1.0
+    * http/1.1
+    * http/2
+
 * [http三次握手](#http三次握手)
+    * 三次握手交互图
+    * 三次握手数据包详细内容分析
+
 * [URI/URL/URN](#URI/URL/URN)
+    * URI
+    * URL
+    * URN
+
 * [跨域CORS](#跨域CORS)
+    * 跨域形成原理简介
+    * 实例来来验证跨域的产生过程
+    * 机遇http协议层面的几种解决办法
+    * CORS预请求
+
 * [缓存头Cache-Control的含义和使用](#缓存头Cache-Control的含义和使用)
+    * 可缓存性（public、private、no-cache）
+    * 到期 （max-age、s-maxage、max-stale）
+    * 重新验证 （must-revalidate、proxy-revalidate）
+    * 其它 （no-store、no-transform）
+    * 实例
+
 * [Cookie](#Cookie)
+    * cookie属性（max-age、Secure、httpOnly）
+    * cookie的domain设置
+    * 实例cookie在浏览器中的使用
+
 * [http长链接](#http长链接)
+    * http长链接简介
+    * http/1.1中长链接的实现示例
+    * 长链接在http2中的应用与http/1.1协议中的对比
+
 * [数据协商](#数据协商)
+
 * [CSP](#CSP)
+    * 限制方式
+    * 参考示例
+    * 更多的设置方式
+
+* [nginx安装配置](#nginx安装配置)
+    * Nginx安装启动
+    * Nginx配置缓存
 
 HTTP协议
 
@@ -94,7 +139,7 @@ http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送�
 先清楚一个概念http请求与tcp链接之间的关系，在客户端向服务端请求和返回的过程中，是需要去创建一个TCP connection，因为http是不存在链接这样一个概念的，它只有请求和响应这样一个概念，请求和响应都是一个数据包，中间要通过一个传输通道，这个传输通道就是在TCP里面创建了一个从客户端发起和服务端接收的一个链接，TCP链接在创建的时候是有一个三次握手(三次网络传输)这样一个消耗在的。
 
 <div align="center"><img src="/img/http2018072201.jpg"></div>
-
+</br>
 三次握手时序图
 
 <div align="center"><img src="/img/http2018072202.jpg"></div>
@@ -769,9 +814,9 @@ response.writeHead(200, {
 
 更多内容可参考 CSP的CDN [参考文档 内容安全策略 (CSP) - Web 安全 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
 
-## Nginx安装配置
+## nginx安装配置
 
-> nginx出发点就是一个http的服务
+> nginx出发点就是一个http的服务，一个纯粹做http协议的服务
 
 #### windows安装可参考以下
 
