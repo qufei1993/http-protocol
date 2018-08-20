@@ -7,8 +7,9 @@
 * [http协议发展历史](#http协议发展历史)
 
 * [http三次握手](#http三次握手)
-    * 三次握手交互图
+    * 三次握手时序图
     * 三次握手数据包详细内容分析
+    * 分析结果总结
 
 * [URI/URL/URN](#URI/URL/URN)
 
@@ -126,7 +127,7 @@ http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送�
 
 > 先清楚一个概念http请求与tcp链接之间的关系，在客户端向服务端请求和返回的过程中，是需要去创建一个TCP connection，因为http是不存在链接这样一个概念的，它只有请求和响应这样一个概念，请求和响应都是一个数据包，中间要通过一个传输通道，这个传输通道就是在TCP里面创建了一个从客户端发起和服务端接收的一个链接，TCP链接在创建的时候是有一个三次握手(三次网络传输)这样一个消耗在的。
 
-#### 客户端与服务器端的一次请求
+#### 客户端与服务器端的一次请求
 
 <div align="center"><img src="/img/http2018072201.jpg"></div>
 </br>
@@ -150,17 +151,17 @@ http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送�
 
 这里采用的是[wireshark 官网地址 https://www.wireshark.org/](https://www.wireshark.org/)，是一个很好的网络数据包抓取和分析软件。
 
-示例采用的http://news.baidu.com/，ping下ip在过滤栏进行过滤。
+示例采用的网址http://news.baidu.com/，windows下打开cmd、Mac下打开终端ping下得到ip可以利用wireshark工具进行一次ip地址过滤，只分析指定的数据。
 
 * 第一次握手，客户端发送一个TCP，标志位为SYN，Seq(序列号)=0，代表客户端请求建立链接，如下图所示
 
 <div align="center"><img src="/img/three-way-handshake/one.png"></div>
 
-* 第二次握手，服务器发回数据包，标志位为[SYN, ACK]，ACK设置为客户端第一次握手请求的Seq+1，即ACK=0+1=1，在随机产生一个Seq的数据包到客户端。
+* 第二次握手，服务器发回数据包，标志位为[SYN, ACK]，ACK设置为客户端第一次握手请求的Seq+1，即ACK=0+1=1，在随机产生一个Seq的数据包到客户端。
 
 <div align="center"><img src="/img/three-way-handshake/two.png"></div>
 
-* 第三次握手请求，客户端在次发送确认数据包，标识位为ACK，把服务器发来的Seq+1，即ACK=0+1，发送给服务器，服务器成功收到ACK报文段之后，连接就建立成功了。
+* 第三次握手请求，客户端在次发送确认数据包，标识位为ACK，把服务器发来的Seq+1，即ACK=0+1，发送给服务器，服务器成功收到ACK报文段之后，连接就建立成功了。
 
 <div align="center"><img src="/img/three-way-handshake/three.png"></div>
 
