@@ -6,7 +6,7 @@ http.createServer((request, response) => {
     console.log('request url: ', request.url);
 
     if (request.url === '/') {
-        const html = fs.readFileSync('./example/cache/cache-control.html', 'utf-8');
+        const html = fs.readFileSync('cache-control.html', 'utf-8');
     
         response.writeHead(200, {
             'Content-Type': 'text/html',
@@ -16,10 +16,11 @@ http.createServer((request, response) => {
     } else if (request.url === '/script.js') {
         response.writeHead(200, {
             'Content-Type': 'text/javascript',
-            'Cache-Control': 'max-age=200'
+            'Cache-Control': 'max-age=200',
+            //'Cache-Control': 'no-cache',
         });
 
-        response.end("console.log('script load ！！！')");
+        response.end("console.log('script load !!!')");
     }
 
 }).listen(port);

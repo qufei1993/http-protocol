@@ -23,7 +23,8 @@ http.createServer((request, response) => {
         response.end(html);
     } else if (request.url === '/data') {
         response.writeHead(200, {
-            'Cache-Control': 'max-age=20',
+            'Cache-Control': 'max-age=20, s-max-age=40',
+            'Vary': 'Test-Cache-Val'
         });
 
         wait(3000).then(() => response.end("success!"));

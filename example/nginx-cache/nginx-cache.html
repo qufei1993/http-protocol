@@ -6,10 +6,14 @@
     </head>
     <body>
         <div>
-            this is nginx-cache, and data is: <span id="data"></span>
+            this is nginx-cache, and data is: <span id="data">请等待，数据获取中...</span>
         </div>
         <script>
-            fetch('/data').then((res => res.text())).then(text => {
+            fetch('/data', {
+                headers: {
+                    'Test-Cache-Val': '123'
+                }
+            }).then((res => res.text())).then(text => {
                 document.getElementById('data').innerText = text;
             });
         </script>

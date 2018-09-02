@@ -45,6 +45,7 @@
 
 * [nginx安装配置](#nginx安装配置)
     * Nginx安装启动
+    * 修改hosts文件配置本地域名
     * Nginx配置缓存
 
 HTTP协议
@@ -409,7 +410,7 @@ console.log('server listening on port ', port);
 
 * public http经过的任何地方都可以进行缓存
 
-* private 只有发起请求的这个浏览器才可以进行缓存
+* private 只有发起请求的这个浏览器才可以进行缓存，如果设置了代理缓存，那么代理缓存是不会生效的
  
 * no-cache 任何一个节点都不可以缓存
 
@@ -417,7 +418,7 @@ console.log('server listening on port ', port);
 
 * max-age=<seconds> 设置缓存到多少秒过期
 
-* s-maxage=<seconds> 会代替max-age，只有在代理服务器才会生效
+* s-maxage=<seconds> 会代替max-age，只有在代理服务器（nginx代理服务器）才会生效
 
 * max-stale=<seconds> 是发起请求方主动带起的一个头，是代表即便缓存过期，但是在max-stale这个时间内还可以使用过期的缓存，而不需要愿服务器请求新的内容
 
@@ -870,11 +871,47 @@ response.writeHead(200, {
 
 ``` sudo nginx -s reload ```
 
-#### Nginx配置缓存
+#### 修改hosts文件配置本地域名
+
+hosts位置:
+* Windows C:\windows\system32\drivers\etc\hosts
+* Mac /private/etc/hosts
+* Ubuntu /etc/hosts
+
+vim hosts
+
+```sh
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1 test.com
+```
+
+保存以上配置即可，127.0.0.1 test.com 在浏览中输入www.test.com域名，就可访问本地指定的网站，仅限于本地。
+
+``` 注意 ``` Nginx中，要做好conf配置，让这些域名有所访问的对象，例如下面Nginx配置缓存处的test.com指向http://127.0.0.1:3010
+
+查看是否配置成功 可以打开cmd ping 一下配置的余名，例如上面配置的
+
+ping test.com
+
+```bash
+PING test.com (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.047 ms
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.095 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.084 ms
+64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.055 ms
+```
+
+#### nginx配置缓存
 
 * levels 是否要创建二级文件夹
 * keys_zone=my_cache:10m 代理缓存查找一个缓存之前要有个地方保存，一个url对应的缓存保存在哪个地方，这个关系是存在内存里的，这里要声明一个内存大小进行保存，my_cache是缓存的名字，在每个server里面可以去设置
 
+新建nginx-cache.conf
 
 ```conf
 proxy_cache_path /var/cache levels=1:2 keys_zone=my_cache:10m;
@@ -890,3 +927,74 @@ server {
     }
 }
 ```
+
+nginx-cache.js
+
+* 以下s-maxage会代替max-age，只有在代理服务器（nginx代理服务器）才会生效
+* 用来指定在发送一个请求时，只有在Vary指定的http的headers是相同的情况下，才会去使用缓存，例如User-Agent，IE、Firefox打开这个页面，CDN／代理服务器就会认为这是不同的页面，将会使用不同的缓存
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 3010;
+
+const wait = seconds => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve();
+        }, seconds);
+    })
+}
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    if (request.url === '/') {
+        const html = fs.readFileSync('nginx-cache.html', 'utf-8');
+    
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+        });
+
+        response.end(html);
+    } else if (request.url === '/data') {
+        response.writeHead(200, {
+            'Cache-Control': 'max-age=20, s-max-age=20',
+            'Vary': 'Test-Cache-Val'
+        });
+
+        wait(3000).then(() => response.end("success!"));
+    }
+
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+ngxin-cache.html
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>nginx-cache</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.min.js"></script>
+    </head>
+    <body>
+        <div>
+            this is nginx-cache, and data is: <span id="data">请等待，数据获取中...</span>
+        </div>
+        <script>
+            fetch('/data', {
+                headers: {
+                    'Test-Cache-Val': '123'
+                }
+            }).then((res => res.text())).then(text => {
+                document.getElementById('data').innerText = text;
+            });
+        </script>
+    </body>
+</html>
+```
+
+以上就是关于nginx代理服务器的实现实例，具体的Nginx代理服务器缓存还是有很多的功能，比如通过一些脚本让缓存使用内存数据库搜索性能会更高，默认nginx缓存是写在磁盘上的，读写磁盘效率是很低的，还可以通过设置cache key等。
