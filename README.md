@@ -174,7 +174,7 @@ http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送�
 
 #### URI
 
-Uniform Resource Identifier/统一资源标志符，用来标示互联网上唯一的信息资源，包括URL和URN。
+Uniform Resource Identifier/统一资源标志符，用来标示互联网上唯一的信息资源，包括URL和URN。
 
 #### URL
 
@@ -182,7 +182,7 @@ Uniform Resource Locator/统一资源定位器
 
 #### URN
 
-永久统一资源定位符，例如资源被移动后如果是URL则会返回404，在URN中资源被移动之后还能被找到，当前还没有什么成熟的使用方案
+永久统一资源定位符，例如资源被移动后如果是URL则会返回404，在URN中资源被移动之后还能被找到，当前还没有什么成熟的使用方案
 
 ## 跨域CORS
 
@@ -517,7 +517,7 @@ response.end("console.log('script load ！！！')");
 
 浏览器运营结果
 
-第二次运行，从memory cahce读取，浏览器控制台并没有打印修改过的内容
+第二次运行，从memory cahce读取，浏览器控制台并没有打印修改过的内容
 
 ![](/img/cache-control2018081103.png)
 
@@ -539,7 +539,7 @@ response.end("console.log('script load ！！！')");
 
 * Last-Modified 上次修改时间，配合If-Modified-Since或者If-Unmo dified-Since使用，对比上次修改时间以验证资源是否可用
 
-* Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
+* Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
 
 ## Cookie
 
@@ -603,7 +603,7 @@ console.log('server listening on port ', port);
 
 * 返回结果
 
-可以看到当b=222设置了httpOnly之后，js就无法读取到该cookie值，示例中只输出了a=111
+可以看到当b=222设置了httpOnly之后，js就无法读取到该cookie值，示例中只输出了a=111
 
 ![](/img/cookie2018081201.png)
 
@@ -611,7 +611,7 @@ console.log('server listening on port ', port);
 
 > 如果想要在一个域名的二级域名中共享同一个cookie需要做domain设置
 
-以下例子中，假设test.com是一级域名，设置一些cookie信息，同时设置domain，使得二级域名可以共享，在之后的二级域名例如 a.test.com, b.test.com访问中都可以访问到同一个cookie信息。
+以下例子中，假设test.com是一级域名，设置一些cookie信息，同时设置domain，使得二级域名可以共享，在之后的二级域名例如 a.test.com, b.test.com访问中都可以访问到同一个cookie信息。
 
 ```js
 const http = require('http');
@@ -641,7 +641,7 @@ console.log('server listening on port ', port);
 
 ## http长链接
 
-> http的请求是在tcp链接之上进行发送，tcp链接分为长链接、短链接的概念，http发送请求的时候会先创建一个tcp链接，在tcp连接上把http请求的内容发送，并接收返回，这个时候一次请求就结束了，浏览器会和服务端商量，要不要把这次tcp链接给关闭到，如果不关闭，这个tcp链接就会一直开着，会有消耗，但是接下去如果还有请求，就可以直接在这个tcp链接上进行发送，那么就不需要经过三次握手这样的一个链接消耗，而如果直接关闭，那么在下次http请求的时候就需要在创建一个tcp链接，长链接是可以设置timeout的，可以设置多长时间在这个tcp链接上没有新的请求就会关闭
+> http的请求是在tcp链接之上进行发送，tcp链接分为长链接、短链接的概念，http发送请求的时候会先创建一个tcp链接，在tcp连接上把http请求的内容发送，并接收返回，这个时候一次请求就结束了，浏览器会和服务端商量，要不要把这次tcp链接给关闭到，如果不关闭，这个tcp链接就会一直开着，会有消耗，但是接下去如果还有请求，就可以直接在这个tcp链接上进行发送，那么就不需要经过三次握手这样的一个链接消耗，而如果直接关闭，那么在下次http请求的时候就需要在创建一个tcp链接，长链接是可以设置timeout的，可以设置多长时间在这个tcp链接上没有新的请求就会关闭
 
 #### http/1.1
 
@@ -703,13 +703,13 @@ console.log('server listening on port ', port);
 
 * 返回结果
 
-可以看到第一次图片加载时复用了第一次localhost的tcp链接，最后两张图片一直在等待前面的tcp链接完成，有一定的响应等待
+可以看到第一次图片加载时复用了第一次localhost的tcp链接，最后两张图片一直在等待前面的tcp链接完成，有一定的响应等待
 
 ![](/img/connection2018081201.png)
 
 http/2
 
-在http/2中有了一个新的概念<strong>信道复用</strong>，在TCP连接上可以并发的去发送http请求，链接一个网站只需要一个TCP链接(同域的情况下)
+在http/2中有了一个新的概念<strong>信道复用</strong>，在TCP连接上可以并发的去发送http请求，链接一个网站只需要一个TCP链接(同域的情况下)
 
 ![]()
 
@@ -911,7 +911,9 @@ PING test.com (127.0.0.1): 56 data bytes
 * levels 是否要创建二级文件夹
 * keys_zone=my_cache:10m 代理缓存查找一个缓存之前要有个地方保存，一个url对应的缓存保存在哪个地方，这个关系是存在内存里的，这里要声明一个内存大小进行保存，my_cache是缓存的名字，在每个server里面可以去设置
 
-新建nginx-cache.conf
+修改conf配置，文件目录了 ``` /usr/local/etc/nginx/servers/ ```
+
+vim nginx-cache.conf
 
 ```conf
 proxy_cache_path /var/cache levels=1:2 keys_zone=my_cache:10m;
@@ -998,3 +1000,187 @@ ngxin-cache.html
 ```
 
 以上就是关于nginx代理服务器的实现实例，具体的Nginx代理服务器缓存还是有很多的功能，比如通过一些脚本让缓存使用内存数据库搜索性能会更高，默认nginx缓存是写在磁盘上的，读写磁盘效率是很低的，还可以通过设置cache key等。
+
+#### nginx部署https服务
+
+##### 生成public key和private key
+
+/usr/local/etc/nginx/certs目录下执行以下命令
+
+```
+openssl req -x509 -newkey rsa:2048 -nodes -sha256 -keyout localhost-privkey.pem -out localhost-cert.pem
+```
+
+```bash
+Generating a 2048 bit RSA private key
+...............................................................................+++
+..............+++
+writing new private key to 'localhost-privkey.pem'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:
+```
+
+##### 基于上面的nginx-cache.conf文件进行修改
+
+```conf
+proxy_cache_path /var/cache levels=1:2 keys_zone=my_cache:10m;
+
+server {
+    listen          443 ssl; # https默认证书
+    server_name     test.com;
+
+    # ssl on; # 开启ssl证书
+    ssl_certificate_key /usr/local/etc/nginx/certs/localhost-privkey.pem;
+    ssl_certificate /usr/local/etc/nginx/certs/localhost-cert.pem;
+
+    location / {
+        proxy_cache my_cache;
+        proxy_pass http://127.0.0.1:3010;
+        proxy_set_header Host $host; # 设置浏览器请求的host
+    }
+}
+```
+
+``` 注意:  ``` [nginx: [warn] the "ssl" directive is deprecated, use the "listen ... ssl"](https://github.com/Q-Angelo/summarize/issues/3) 
+
+##### http自动跳转https
+
+```conf
+proxy_cache_path /var/cache levels=1:2 keys_zone=my_cache:10m;
+
+server {
+    listen          80 default_server;
+    listen          [::]:80 default_server; # [::] 你的ip
+    server_name     test.com;
+    return 302 https://$server_name$request_uri;
+}
+
+server {
+    listen          443 ssl; # https默认证书
+    server_name     test.com;
+
+    # ssl on; # 开启ssl证书
+    ssl_certificate_key /usr/local/etc/nginx/certs/localhost-privkey.pem;
+    ssl_certificate /usr/local/etc/nginx/certs/localhost-cert.pem;
+
+    location / {
+        proxy_cache my_cache;
+        proxy_pass http://127.0.0.1:3010;
+        proxy_set_header Host $host; # 设置浏览器请求的host
+    }
+}
+```
+
+#### 实现http2协议
+
+http2目前只能在https下面才可以
+
+* 优势: 
+    * 信道复用
+    * 分帧传输
+    * Server Push http/1.1协议里是客户端主动请求，服务才会响应，
+
+http2.conf
+
+```conf
+server {
+    listen          443 ssl http2;
+    server_name     http2.test.com;
+    http2_push_preload on; 
+
+    ssl_certificate_key /usr/local/etc/nginx/certs/localhost-privkey.pem;
+    ssl_certificate /usr/local/etc/nginx/certs/localhost-cert.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:30100;
+        proxy_set_header Host $host;
+    }
+}
+```
+
+connection.js [基于http/1.1长链接示例修改](https://github.com/Q-Angelo/http-protocol#http11%E9%95%BF%E9%93%BE%E6%8E%A5%E7%A4%BA%E4%BE%8B)
+
+```js
+const http = require('http');
+const fs = require('fs');
+const port = 30100;
+
+http.createServer((request, response) => {
+    console.log('request url: ', request.url);
+
+    const html = fs.readFileSync('./connection.html', 'utf-8');
+    const img = fs.readFileSync('./test_img.jpg');
+
+    if (request.url === '/') {
+        response.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Connection': 'close',
+            'Link': '</test.jpg>; as=image; rel=preload',
+        });
+
+        response.end(html);
+    } else {
+        response.writeHead(200, {
+            'Content-Type': 'image/jpg'
+        });
+
+        response.end(img);
+    }
+}).listen(port);
+
+console.log('server listening on port ', port);
+```
+
+connection.html
+
+```html
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>http2-connection</title>
+        <style>
+            img {
+                width: 100px;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        1
+        <img src="/test1.jpg" alt="" />
+        2
+        <img src="/test2.jpg" alt="" />
+        3
+        <img src="/test3.jpg" alt="" />
+        4
+        <img src="/test4.jpg" alt="" />
+        5
+        <img src="/test5.jpg" alt="" />
+        6
+        <img src="/test6.jpg" alt="" />
+        7
+        <img src="/test7.jpg" alt="" />
+        8
+        <img src="/test8.jpg" alt="" />
+    </body>
+</html>
+```
+
+运行效果，基于http2协议复合浏览器同域策略都在一个TCP上服用
+
+![](/img/connection2018090901.png)
+
+测试http2性能的网站 [https://http2.akamai.com/demo/http2-lab.html](https://http2.akamai.com/demo/http2-lab.html)
