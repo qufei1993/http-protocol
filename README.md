@@ -4,7 +4,7 @@
 
 ## 目录
 
-##### [5层网络模型介绍](#5层网络模型介绍)
+#### [5层网络模型介绍](#5层网络模型介绍)
 
 > 互联网的实现分为好几层，每层都有自己的功能，向城市里的高楼一样，每层都需要依赖下一层，对于用户接触到的，只是上面最高一层，当然，如果要了解互联网，就必须从最下层开始自下而上理解每一层的功能。
 
@@ -14,22 +14,22 @@
 * `[5层模型]` [数据链路层 ](#数据链路层)
 * `[5层模型]` [物理层 ](#物理层)
 
-##### [http协议发展历史](#http协议发展历史)
+#### [http协议发展历史](#http协议发展历史)
 
-##### [http三次握手](#http三次握手)
+#### [http三次握手](#http三次握手)
     * 三次握手时序图
     * 三次握手数据包详细内容分析
     * 分析结果总结
 
-##### [URI/URL/URN](#URI/URL/URN)
+#### [URI/URL/URN](#URI/URL/URN)
 
-##### [跨域CORS](#跨域cors)
+#### [跨域CORS](#跨域cors)
 * 跨域形成原理简介
 * 实例来来验证跨域的产生过程
 * 机遇http协议层面的几种解决办法
 * CORS预请求
 
-##### [缓存头Cache-Control的含义和使用](#缓存头Cache-Control的含义和使用)
+#### [缓存头Cache-Control的含义和使用](#缓存头Cache-Control的含义和使用)
 
 * 可缓存性（public、private、no-cache）
 * 到期 （max-age、s-maxage、max-stale）
@@ -37,31 +37,29 @@
 * 其它 （no-store、no-transform）
 * 实例
 
-##### [Cookie](#Cookie)
+#### [Cookie](#Cookie)
 * cookie属性（max-age、Secure、httpOnly）
 * cookie的domain设置
 * 实例cookie在浏览器中的使用
 
-##### [http长链接](#http长链接)
+#### [http长链接](#http长链接)
 * http长链接简介
 * http/1.1中长链接的实现示例
 * 长链接在http2中的应用与http/1.1协议中的对比
 
 ##### [数据协商](#数据协商)
 
-##### [CSP](#CSP)
+#### [CSP](#CSP)
 * 限制方式
 * 参考示例
 * 更多的设置方式
 
-##### [nginx安装配置](#nginx安装配置)
+#### [nginx安装配置](#nginx安装配置)
 * Nginx安装启动
 * 修改hosts文件配置本地域名
 * Nginx配置缓存
 * nginx部署https服务
 * 实现http2协议
-
-HTTP协议
 
 ## 5层网络模型介绍
 
