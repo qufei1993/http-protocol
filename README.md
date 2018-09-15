@@ -27,9 +27,9 @@
 
 > 网络传输是有延时的，中间可能隔着非常远的距离，通过光纤或者中间代理服务器等，经过三次握手是为了防止服务端开启一些无用的链接。
 
-* 三次握手时序图
-* 三次握手数据包详细内容分析
-* 分析结果总结
+* `[HTTP三次握手]` 三次握手时序图
+* `[HTTP三次握手]` 三次握手数据包详细内容分析
+* `[HTTP三次握手]` 分析结果总结
 
 #### [URI/URL/URN](#URI/URL/URN)
 
@@ -37,46 +37,52 @@
 
 > 关于浏览器跨域的原理，一个请求在浏览器端发送出去后，是会收到返回值响应的，只不过浏览器在解析这个请求的响应之后，发现不属于浏览器的同源策略(地址里面的协议、域名和端口号均相同)，会进行拦截。
 
-* 跨域形成原理简介
-* 实例来来验证跨域的产生过程
-* 机遇http协议层面的几种解决办法
-* CORS预请求
+* `[CORS]` 跨域形成原理简介
+* `[CORS]` 实例来来验证跨域的产生过程
+* `[CORS]` 机遇http协议层面的几种解决办法
+* `[CORS]` CORS预请求
 
 #### [缓存头Cache-Control的含义和使用](#缓存头Cache-Control的含义和使用)
 
-* 可缓存性（public、private、no-cache）
-* 到期 （max-age、s-maxage、max-stale）
-* 重新验证 （must-revalidate、proxy-revalidate）
-* 其它 （no-store、no-transform）
-* 实例
+* `[Cache-Control]` 可缓存性（public、private、no-cache）
+* `[Cache-Control]` 到期 （max-age、s-maxage、max-stale）
+* `[Cache-Control]` 重新验证 （must-revalidate、proxy-revalidate）
+* `[Cache-Control]` 其它 （no-store、no-transform）
+* `[Cache-Control]` 实例
 
 ###### 思考两个问题?
 1. 在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？
 2. 在使用webpack等一些打包工具时，为什么要加上一串hash码？
 
-#### [Cookie](#Cookie)
-* cookie属性（max-age、Secure、httpOnly）
-* cookie的domain设置
-* 实例cookie在浏览器中的使用
+#### [Cookie](#cookie)
+* `[Cookie]` cookie属性（max-age、Secure、httpOnly）
+* `[Cookie]` cookie的domain设置
+* `[Cookie]` 实例cookie在浏览器中的使用
 
-#### [http长链接](#http长链接)
-* http长链接简介
-* http/1.1中长链接的实现示例
-* 长链接在http2中的应用与http/1.1协议中的对比
+#### [HTTP长链接](#http长链接)
+* `[HTTP长链接]` http长链接简介
+* `[HTTP长链接]` http/1.1中长链接的实现示例
+* `[HTTP长链接]` 长链接在http2中的应用与http/1.1协议中的对比
 
 ##### [数据协商](#数据协商)
 
-#### [CSP](#CSP)
-* 限制方式
-* 参考示例
-* 更多的设置方式
+#### [CSP](#csp)
 
-#### [nginx安装配置](#nginx安装配置)
-* Nginx安装启动
-* 修改hosts文件配置本地域名
-* Nginx配置缓存
-* nginx部署https服务
-* 实现http2协议
+> Content-Security-Policy内容安全策略，限制资源获取
+
+* `[CSP]` 限制方式
+* `[CSP]` 参考示例
+* `[CSP]` 更多的设置方式
+
+#### [Nginx服务配置](#nginx服务配置)
+
+> nginx出发点就是一个http的服务，一个纯粹做http协议的服务
+
+* `[Nginx服务配置]` Nginx安装启动
+* `[Nginx服务配置]` 修改hosts文件配置本地域名
+* `[Nginx服务配置]` Nginx配置缓存
+* `[Nginx服务配置]` nginx部署https服务
+* `[Nginx服务配置]` 实现http2协议
 
 ## 5层网络模型介绍
 
@@ -571,7 +577,7 @@ response.end("console.log('script load ！！！')");
 
 * Etag 数据签名，配合If-Match或者If-Non-Match使用，对比资源的签名判断是否使用缓存
 
-## Cookie
+## cookie
 
 通过Set-Cookie设置，下次请求会自动带上，键值对形式可以设置多个
 
@@ -749,7 +755,7 @@ http/2
 // todo
 ```
 
-## CSP
+## csp
 
 Content-Security-Policy内容安全策略，限制资源获取
 
@@ -861,7 +867,7 @@ response.writeHead(200, {
 
 更多内容可参考 CSP的CDN [参考文档 内容安全策略 (CSP) - Web 安全 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/CSP)
 
-## nginx安装配置
+## nginx服务配置
 
 > nginx出发点就是一个http的服务，一个纯粹做http协议的服务
 
