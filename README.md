@@ -47,6 +47,8 @@
     * Nginx安装启动
     * 修改hosts文件配置本地域名
     * Nginx配置缓存
+    * nginx部署https服务
+    * 实现http2协议
 
 HTTP协议
 
@@ -1179,7 +1181,7 @@ connection.html
 </html>
 ```
 
-运行效果，基于http2协议复合浏览器同域策略都在一个TCP上服用
+运行效果，基于http2协议复合浏览器同域策略都在一个TCP上复用
 
 ![](/img/connection2018090901.png)
 
