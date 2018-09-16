@@ -18,10 +18,10 @@
 
 > http是基于TCP/IP之上的应用层协议，也是互联网的基础协议，最新http2协议基于信道复用，分帧传输在传输效率上也有了大幅度的提升
 
-* `[HTTP协议]` [http/0.9](#http/0.9)
-* `[HTTP协议]` [http/1.0](#http/1.0)
-* `[HTTP协议]` [http/1.1](#http/1.1)
-* `[HTTP协议]` [http/2](#http/2)
+* `[HTTP协议]` [http/0.9](#HTTP协议发展历史)
+* `[HTTP协议]` [http/1.0](#HTTP协议发展历史)
+* `[HTTP协议]` [http/1.1](HTTP协议发展历史)
+* `[HTTP协议]` [http/2](#HTTP协议发展历史)
 
 #### http三次握手
 
@@ -29,7 +29,7 @@
 
 * `[HTTP三次握手]` [三次握手时序图](#三次握手时序图)
 * `[HTTP三次握手]` [三次握手数据包详细内容分析](#三次握手数据包详细内容分析)
-* `[HTTP三次握手]` [分析结果总结](#分析结果总结)
+* `[HTTP三次握手]` [分析总结](#总结)
 
 #### [URI/URL/URN](#URI/URL/URN)
 
@@ -37,9 +37,9 @@
 
 > 关于浏览器跨域的原理，一个请求在浏览器端发送出去后，是会收到返回值响应的，只不过浏览器在解析这个请求的响应之后，发现不属于浏览器的同源策略(地址里面的协议、域名和端口号均相同)，会进行拦截。
 
-* `[CORS]` [跨域形成原理简介](#跨域形成原理简介)
-* `[CORS]` [实例来来验证跨域的产生过程](#实例来来验证跨域的产生过程)
-* `[CORS]` [机遇http协议层面的几种解决办法](#机遇http协议层面的几种解决办法)
+* `[CORS]` [跨域形成原理简介](#跨域cors)
+* `[CORS]` [实例来验证跨域的产生过程](#示例)
+* `[CORS]` [基于http协议层面的几种解决办法](#基于http协议层面的几种解决办法)
 * `[CORS]` [CORS预请求](#cors预请求)
 
 #### 缓存头Cache-Control的含义和使用
@@ -48,7 +48,7 @@
 * `[Cache-Control]` [到期 （max-age、s-maxage、max-stale）](#到期)
 * `[Cache-Control]` [重新验证 （must-revalidate、proxy-revalidate）](#重新验证)
 * `[Cache-Control]` [其它 （no-store、no-transform）](#其它)
-* `[Cache-Control]` [实例](#实例)
+* `[Cache-Control]` [示例](#示例)
 
 ###### 思考两个问题?
 1. 在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？
@@ -57,12 +57,12 @@
 #### Cookie
 * `[Cookie]` [cookie属性（max-age、Secure、httpOnly）](#cookie属性)
 * `[Cookie]` [cookie的domain设置](#cookie的domain设置)
-* `[Cookie]` [实例cookie在浏览器中的使用](#实例cookie在浏览器中的使用)
+* `[Cookie]` [实例cookie在浏览器中的使用](#cookie的domain设置)
 
 #### HTTP长链接
-* `[HTTP长链接]` [http长链接简介](#http长链接简介)
-* `[HTTP长链接]` [http/1.1中长链接的实现示例](#http/1.1中长链接的实现示例)
-* `[HTTP长链接]` [长链接在http2中的应用与http/1.1协议中的对比](#长链接在http2中的应用与http/1.1协议中的对比)
+* `[HTTP长链接]` [http长链接简介](#http长链接)
+* `[HTTP长链接]` [http/1.1中长链接的实现示例](#http长链接)
+* `[HTTP长链接]` [长链接在http2中的应用与http/1.1协议中的对比](#http长链接)
 
 #### [数据协商](#数据协商)
 
@@ -78,11 +78,11 @@
 
 > nginx出发点就是一个http的服务，一个纯粹做http协议的服务
 
-* `[Nginx服务配置]` [Nginx安装启动](#cookie属性)
-* `[Nginx服务配置]` [修改hosts文件配置本地域名](#cookie属性)
-* `[Nginx服务配置]` [Nginx配置缓存](#cookie属性)
-* `[Nginx服务配置]` [nginx部署https服务](#cookie属性)
-* `[Nginx服务配置]` [实现http2协议](#cookie属性)
+* `[Nginx服务配置]` [Nginx安装启动](#nginx安装启动)
+* `[Nginx服务配置]` [修改hosts文件配置本地域名](#修改hosts文件配置本地域名)
+* `[Nginx服务配置]` [Nginx配置缓存](#nginx配置缓存)
+* `[Nginx服务配置]` [nginx部署https服务](#nginx部署https服务)
+* `[Nginx服务配置]` [实现http2协议](#实现http2协议)
 
 ## 5层网络模型介绍
 
@@ -222,7 +222,9 @@ Uniform Resource Locator/统一资源定位器
 
 ## 跨域cors
 
-关于浏览器跨域的原理，一个请求在浏览器端发送出去后，是会收到返回值响应的，只不过浏览器在解析这个请求的响应之后，发现不属于浏览器的同源策略(地址里面的协议、域名和端口号均相同)，会进行拦截。如果是在curl里面发送一个请求，都是没有跨域这样一个概念的，下面是例子进行分析：
+> 关于浏览器跨域的原理，一个请求在浏览器端发送出去后，是会收到返回值响应的，只不过浏览器在解析这个请求的响应之后，发现不属于浏览器的同源策略(地址里面的协议、域名和端口号均相同)，会进行拦截。如果是在curl里面发送一个请求，都是没有跨域这样一个概念的，下面是例子进行分析：
+
+#### 示例
 
 server.html
 
@@ -290,7 +292,7 @@ console.log('server listening on port ', port);
 Failed to load http://127.0.0.1:3011/: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://127.0.0.1:3010' is therefore not allowed access.
 ```
 
-解决的几种方法
+#### 基于http协议层面的几种解决办法
 
 * 设置Access-Control-Allow-Origin
 
@@ -355,7 +357,7 @@ Failed to load http://127.0.0.1:3011/: No 'Access-Control-Allow-Origin' header i
 </html>
 ```
 
-CORS预请求
+#### CORS预请求
 
 预请求也是浏览器的一种安全机制，会先发送一个OPTIONS请求给目的站点，与跨域服务器协商可以设置的头部信息，允许的方法和headers信息等。
 
