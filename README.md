@@ -2,87 +2,66 @@
 
 > http请求和tcp链接不是一个概念，在一个tcp链接里，可以发送多个http请求，之前的协议版本是不可以这么做的，从http/1.1里面就可以这样做了，tcp链接对应的是多个http请求，而一个http请求肯定是在某个tcp链接里面进行发送的。
 
-## 目录
+## 快速导航
 
-#### 5层网络模型介绍
+- **5层网络模型介绍** [[more]](#5层网络模型介绍)
+    * `[TCP/IP]` [应用层 ](#应用层)
+    * `[TCP/IP]` [传输层 ](#传输层)
+    * `[TCP/IP]` [网络层 ](#网络层)
+    * `[TCP/IP]` [数据链路层 ](#数据链路层)
+    * `[TCP/IP]` [物理层 ](#物理层)
 
-> 互联网的实现分为好几层，每层都有自己的功能，向城市里的高楼一样，每层都需要依赖下一层，对于用户接触到的，只是上面最高一层，当然，如果要了解互联网，就必须从最下层开始自下而上理解每一层的功能。
+- **HTTP协议发展历史** [[more]](#http协议发展历史)
+    * `[HTTP协议]` [http/0.9](#阶段一)
+    * `[HTTP协议]` [http/1.0](#阶段二)
+    * `[HTTP协议]` [http/1.1](阶段三)
+    * `[HTTP协议]` [http/2](#阶段四)
 
-* `[5层模型]` [应用层 ](#应用层)
-* `[5层模型]` [传输层 ](#传输层)
-* `[5层模型]` [网络层 ](#网络层)
-* `[5层模型]` [数据链路层 ](#数据链路层)
-* `[5层模型]` [物理层 ](#物理层)
+- **http三次握手** [[more]](#http三次握手)
+    * `[HTTP三次握手]` [三次握手时序图](#三次握手时序图)
+    * `[HTTP三次握手]` [三次握手数据包详细内容分析](#三次握手数据包详细内容分析)
+    * `[HTTP三次握手]` [分析总结](#总结)
 
-#### HTTP协议发展历史
+- **URI/URL/URN**
 
-> http是基于TCP/IP之上的应用层协议，也是互联网的基础协议，最新http2协议基于信道复用，分帧传输在传输效率上也有了大幅度的提升
+- **跨域CORS** [[more]](#跨域cors)
+    * `[CORS]` [跨域形成原理简介](#跨域cors)
+    * `[CORS]` [实例来验证跨域的产生过程](#示例)
+    * `[CORS]` [基于http协议层面的几种解决办法](#基于http协议层面的几种解决办法)
+    * `[CORS]` [CORS预请求](#cors预请求)
 
-* `[HTTP协议]` [http/0.9](#HTTP协议发展历史)
-* `[HTTP协议]` [http/1.0](#HTTP协议发展历史)
-* `[HTTP协议]` [http/1.1](HTTP协议发展历史)
-* `[HTTP协议]` [http/2](#HTTP协议发展历史)
+- **缓存头Cache-Control的含义和使用**
+    * `[Cache-Control]` [可缓存性（public、private、no-cache）](#可缓存性)
+    * `[Cache-Control]` [到期 （max-age、s-maxage、max-stale）](#到期)
+    * `[Cache-Control]` [重新验证 （must-revalidate、proxy-revalidate）](#重新验证)
+    * `[Cache-Control]` [其它 （no-store、no-transform）](#其它)
+    * `[Cache-Control]` [缓存cache-control示例](#缓存cache-control示例)
 
-#### http三次握手
+    1. `[思考]` `在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？`，参考：[#](#缓存cache-control示例)
+    2. `[思考]` `在使用webpack等一些打包工具时，为什么要加上一串hash码？`，参考：[#](#缓存cache-control示例)
 
-> 网络传输是有延时的，中间可能隔着非常远的距离，通过光纤或者中间代理服务器等，经过三次握手是为了防止服务端开启一些无用的链接。
+- **Cookie**
+    * `[Cookie]` [cookie属性（max-age、Secure、httpOnly）](#cookie属性)
+    * `[Cookie]` [cookie的domain设置](#cookie的domain设置)
+    * `[Cookie]` [实例cookie在浏览器中的使用](#cookie的domain设置)
 
-* `[HTTP三次握手]` [三次握手时序图](#三次握手时序图)
-* `[HTTP三次握手]` [三次握手数据包详细内容分析](#三次握手数据包详细内容分析)
-* `[HTTP三次握手]` [分析总结](#总结)
+- **HTTP长链接**
+    * `[KeepAlive]` [http长链接简介](#http长链接)
+    * `[KeepAlive]` [http/1.1中长链接的实现示例](#http长链接)
+    * `[KeepAlive]` [长链接在http2中的应用与http/1.1协议中的对比](#http长链接)
 
-#### [URI/URL/URN](#URI/URL/URN)
+- **数据协商**
+- **CSP**
+    * `[CSP]` [限制方式](#限制方式)
+    * `[CSP]` [参考示例](#参考示例)
+    * `[CSP]` [更多的设置方式](#更多的设置方式)
 
-#### 跨域CORS
-
-> 关于浏览器跨域的原理，一个请求在浏览器端发送出去后，是会收到返回值响应的，只不过浏览器在解析这个请求的响应之后，发现不属于浏览器的同源策略(地址里面的协议、域名和端口号均相同)，会进行拦截。
-
-* `[CORS]` [跨域形成原理简介](#跨域cors)
-* `[CORS]` [实例来验证跨域的产生过程](#示例)
-* `[CORS]` [基于http协议层面的几种解决办法](#基于http协议层面的几种解决办法)
-* `[CORS]` [CORS预请求](#cors预请求)
-
-#### 缓存头Cache-Control的含义和使用
-
-* `[Cache-Control]` [可缓存性（public、private、no-cache）](#可缓存性)
-* `[Cache-Control]` [到期 （max-age、s-maxage、max-stale）](#到期)
-* `[Cache-Control]` [重新验证 （must-revalidate、proxy-revalidate）](#重新验证)
-* `[Cache-Control]` [其它 （no-store、no-transform）](#其它)
-* `[Cache-Control]` [示例](#示例)
-
-###### 思考两个问题?
-1. 在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？
-2. 在使用webpack等一些打包工具时，为什么要加上一串hash码？
-
-#### Cookie
-* `[Cookie]` [cookie属性（max-age、Secure、httpOnly）](#cookie属性)
-* `[Cookie]` [cookie的domain设置](#cookie的domain设置)
-* `[Cookie]` [实例cookie在浏览器中的使用](#cookie的domain设置)
-
-#### HTTP长链接
-* `[HTTP长链接]` [http长链接简介](#http长链接)
-* `[HTTP长链接]` [http/1.1中长链接的实现示例](#http长链接)
-* `[HTTP长链接]` [长链接在http2中的应用与http/1.1协议中的对比](#http长链接)
-
-#### [数据协商](#数据协商)
-
-#### CSP
-
-> Content-Security-Policy内容安全策略，限制资源获取
-
-* `[CSP]` [限制方式](#限制方式)
-* `[CSP]` [参考示例](#参考示例)
-* `[CSP]` [更多的设置方式](#更多的设置方式)
-
-#### Nginx服务配置
-
-> nginx出发点就是一个http的服务，一个纯粹做http协议的服务
-
-* `[Nginx服务配置]` [Nginx安装启动](#nginx安装启动)
-* `[Nginx服务配置]` [修改hosts文件配置本地域名](#修改hosts文件配置本地域名)
-* `[Nginx服务配置]` [Nginx配置缓存](#nginx配置缓存)
-* `[Nginx服务配置]` [nginx部署https服务](#nginx部署https服务)
-* `[Nginx服务配置]` [实现http2协议](#实现http2协议)
+- **Nginx服务配置**
+    * `[Nginx]` [Nginx安装启动](#nginx安装启动)
+    * `[Nginx]` [修改hosts文件配置本地域名](#修改hosts文件配置本地域名)
+    * `[Nginx]` [Nginx配置缓存](#nginx配置缓存)
+    * `[Nginx]` [nginx部署https服务](#nginx部署https服务)
+    * `[Nginx]` [实现http2协议](#实现http2协议)
 
 ## 5层网络模型介绍
 
@@ -126,38 +105,31 @@
 
 > http是基于TCP/IP之上的应用层协议，也是互联网的基础协议，最新http2协议基于信道复用，分帧传输在传输效率上也有了大幅度的提升
 
-#### http/0.9
+#### 阶段一
+
+**http/0.9**
 
 只有一个命令GET，对应我们现在的请求GET、POST，没有header等描述数据的信息，服务器发送完毕数据就关闭TCP链接，每个http请求都要经历一次dns域名解析、传输和四次挥手，这样反复创建和断开tcp链接的开销是巨大的，在现在看来这种方式很糟糕。
 
-#### http/1.0
-
+#### 阶段二 
+**http/1.0**
 * 增加了很多命令POST、GET、HEAD
-
 * 等增status code和header
-
-    status code描述服务端处理某一个请求之后它的状态， header是不管发送还是请求一个数据它的描述。
-
+> status code描述服务端处理某一个请求之后它的状态， header是不管发送还是请求一个数据它的描述。
 * 多字符集支持、多部分发送、权限、缓存等。
 
-#### http/1.1
-
+#### 阶段三
+**http/1.1**
 * 持久链接
-
 * 管道机制(pipeline)
-
-    可以在同一个链接里发送多个请求，但是在服务端对于进来的请求都是要按照顺序进行内容的返回，如果前一个请求很慢，后一个请求很多，它也需要第一个请求发送之后，后一个请求才可以发送，这块在http2里面进行了优化
-
+> 可以在同一个链接里发送多个请求，但是在服务端对于进来的请求都是要按照顺序进行内容的返回，如果前一个请求很慢，后一个请求很多，它也需要第一个请求发送之后，后一个请求才可以发送，这块在http2里面进行了优化
 * 增加host和其他功能
+> 增加host可以在同一台物理服务器上跑多个web服务，例如一个nodejs的web服务，一个java的web服务
 
-    增加host可以在同一台物理服务器上跑多个web服务，例如一个nodejs的web服务，一个java的web服务
-
-#### http/2
-
+#### 阶段四
+**http/2**
 * 所有数据以二进制传输
-
 * 同一个链接里面发送多个请求，不在需要按照顺序来
-
 * 头信息压缩以及推送等提高效率的功能
 
 ## http三次握手
@@ -473,7 +445,7 @@ console.log('server listening on port ', port);
 * no-transform 主要用于proxy服务器，告诉代理服务器不要随意改动返回的内容
 
 
-#### 示例
+#### 缓存cache-control示例
 
 * 先思考两个问题?
     1. 在页面中引入静态资源文件，为什么静态资源文件改变后，再次发起请求还是之前的内容，没有变化呢？
@@ -1219,6 +1191,6 @@ connection.html
 
 运行效果，基于http2协议复合浏览器同域策略都在一个TCP上复用
 
-![](/img/connection2018090901.png)
+![](./img/connection2018090901.png)
 
 测试http2性能的网站 [https://http2.akamai.com/demo/http2-lab.html](https://http2.akamai.com/demo/http2-lab.html)
