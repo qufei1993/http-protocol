@@ -1,6 +1,10 @@
 # 域名解析（DNS）过程
 
+> 社会犹如一条船，每个人都要有掌舵的准备。——易卜生
+
 为了方便记忆，我们通常会通过域名的方式访问网站，例如直接在浏览器地址栏输入 [www.nodejs.red](www.nodejs.red) 就可得到一个请求响应，但是在计算机网络通信时是只能识别 IP（127.0.0.1） 地址的，为什么我直接输入一串字母就可以访问呢？这背后的功劳就要归功于我们的 “翻译官” DNS 也就是域名系统，它会将我们的域名转换为 IP 地址进行工作。
+
+**作者简介**：五月君，Nodejs Developer，慕课网认证作者，热爱技术、喜欢分享的 90 后青年，欢迎关注 [Nodejs技术栈](https://nodejsred.oss-cn-shanghai.aliyuncs.com/node_roadmap_wx.jpg?x-oss-process=style/may) 和 Github 开源项目 [https://www.nodejs.red](https://www.nodejs.red)
 
 做为面试来讲，通常也是一个经常被拷问的面试点，不论你是做前端、后端或者运维都建议去学习下，以下会列出 DNS 解析的步骤：
 
