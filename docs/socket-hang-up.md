@@ -1,4 +1,4 @@
-# Socket hang up 是什么？
+# Socket hang up 是什么？什么情况下会发生？
 
 > 心灵纯洁的人，生活充满甜蜜和喜悦。——列夫·托尔斯泰
 
@@ -18,7 +18,7 @@ hang up 翻译为英文有挂断的意思, socket hang up 也可以理解为 soc
 
 **服务端**
 
-开启一个 http 服务，定义 /timeout 接口设置 3 秒之后延迟响应
+开启一个 http 服务，定义 /timeout 接口设置 3 分钟之后延迟响应
 
 ```js
 const http = require('http');
@@ -63,7 +63,7 @@ http.get(opts, (res) => {
 });
 ```
 
-启动服务端之后再启动客户端大约 2 两分钟之后或者直接 kill 掉服务端会报如下错误，可以看到相应的错误堆栈
+启动服务端之后再启动客户端大约 2 分钟之后或者直接 kill 掉服务端会报如下错误，可以看到相应的错误堆栈
 
 ```bash
 Error: socket hang up
