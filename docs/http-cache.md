@@ -1,4 +1,4 @@
-# 浏览器缓存策略
+# 理论加实践一次搞懂浏览器缓存策略
 
 ## 几个阶段
 
@@ -155,6 +155,9 @@ response.end("console.log('script load ！！！')");
 
 ![](./img/cache/cache-control2018081104.png)
 
+> 源码参考：
+> github.com/Q-Angelo/http-protocol/blob/master/example/cache/cache-control.js
+
 以上结果浏览器并没有返回给我们服务端修改的结果，这是为什么呢？
 
 **先回答第一个问题**
@@ -216,6 +219,9 @@ if (request.url === '/script.js') {
 
 ![](./img/cache/last-modified-no-set-cache.png)
 
+> 源码地址
+> github.com/Q-Angelo/http-protocol/tree/master/example/cache/last-modified
+
 显然是**强缓存**生效了，你可能会想我没有设置强缓存哦😯
 
 这是因为浏览器默认启用了一个**启发式缓存**，这在设置了 Last-Modified 响应头且没有设置 Cache-Control: max-age/s-maxage 或 Expires 时会触发，它的一个**缓存时间是用 Date - Last-Modified 的值的 10% 作为缓存时间**。
@@ -236,6 +242,9 @@ response.writeHead(200, {
 
 ![](./img/cache/last-modified-max-age-304-01.png)
 ![](./img/cache/last-modified-max-age-304-02.png)
+
+> 源码地址
+> https://github.com/Q-Angelo/http-protocol/tree/master/example/cache/last-modified-max-age
 
 ### ETag 和 If-None-Match
 
@@ -267,6 +276,13 @@ if (request.url === '/script.js') {
     readStream.pipe(response);
 }
 ```
+
+> 源码地址
+> github.com/Q-Angelo/http-protocol/tree/master/example/cache/etag
+
+node etag.js 运行我们程序，打开我们的页面多次访问，第二次会看到浏览器会携带一个 If-None-Match 的 Header 头传递到服务端进行校验，当前协商缓存命中了所以响应状态为 304
+
+![](./img/cache/etag.png)
 
 ### Last-Modified 与 Etag 对比
 
