@@ -1,6 +1,8 @@
 # 理论加实践一次搞懂浏览器缓存策略
 
-## 几个阶段
+在后端为了加速服务的访问速度，通常可以使用 Memcached、Redis 做数据缓存，那么在浏览器端又有哪些缓存策略呢？
+
+## 一、浏览器缓存几个阶段
 
 ### 1. 强缓存策略
 
@@ -14,7 +16,7 @@
 
 当强缓存->协商缓存都未命中，请求会直接到达服务器，获取最新资源设置缓存策略，进行返回。
 
-## 强缓存
+## 二、强缓存
 
 强缓存的实现分为 Expires、Cache-Control 两个。
 
@@ -174,11 +176,11 @@ response.end("console.log('script load ！！！')");
 
 ### Expires 与 Cache-Control 对比
 
-HTTP 协议对比：Expires 属于 HTTP 1.0 时代的产物，Cache-Control 属于 HTTP 1.1 时代的产物
-优先级对比：如果同时使用 Cache-Control 的 max-age 与 Expires，则 max-age 优先级会更高，会忽略掉 Expires
-缓存单位：Expires 与 Cache-Control 两者的缓存单位都是以时间为维度，如果我要根据文件的内容变化来判断缓存是否失效怎么办呢？就需要用到下面的协商缓存了。
+* HTTP 协议对比：Expires 属于 HTTP 1.0 时代的产物，Cache-Control 属于 HTTP 1.1 时代的产物
+* 优先级对比：如果同时使用 Cache-Control 的 max-age 与 Expires，则 max-age 优先级会更高，会忽略掉 Expires
+* 缓存单位：Expires 与 Cache-Control 两者的缓存单位都是以时间为维度，如果我要根据文件的内容变化来判断缓存是否失效怎么办呢？就需要用到下面的协商缓存了。
 
-## 协商缓存
+## 三、协商缓存
 
 如果强缓存未命中或用户按下 F5 强制刷新后进入协商缓存，服务器则根据浏览器请求时的标识进行判断，如果协商缓存生效返回 304 否则返回 200。协商缓存的实现也是基于两点 Last-Modified、ETag 这个需要在 HTTP Headers 中设置。
 
