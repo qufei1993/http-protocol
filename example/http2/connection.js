@@ -11,8 +11,8 @@ http.createServer((request, response) => {
     if (request.url === '/') {
         response.writeHead(200, {
             'Content-Type': 'text/html',
-            'Connection': 'close',
-            'Link': '</test.jpg>; as=image; rel=preload',
+            //'Connection': 'close',
+            //'Link': '</test.jpg>; as=image; rel=preload',
         });
 
         response.end(html);
