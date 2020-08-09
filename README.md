@@ -14,7 +14,7 @@ HTTP 协议是互联网的基础协议，也是做为一名合格开发者的必
 * [理论加实践搞懂浏览器缓存策略](./docs/http-cache.md)
 * [Nginx 代理服务配置缓存实践](./docs/nginx-cache.md)
 * [HTTP 长链接 — HTTP1.1 与 HTTP2 下的对比](./docs/http-keepalive.md)
-* [跨域（CORS）产生的原因分析与解决方案](./docs/cors.md)
+* [跨域（CORS）产生原因分析与解决方案，这一次彻底搞懂它](./docs/cors.md)
 * [Socket hang up 是什么？什么情况下会发生？](./docs/socket-hang-up.md)
 * [DNS 域名解析过程？](./docs/dns-process.md)
 * [内容安全策略（CSP）](./docs/csp.md)
