@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>cors</title>
+  </head>
+  <body>
+    <script>
+      fetch('http://127.0.0.1:3011/api/data', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Test-Cors': 'abc',
+        }
+      });
+    </script>
+  </body>
+</html>
