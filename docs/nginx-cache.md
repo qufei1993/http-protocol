@@ -19,6 +19,7 @@ Nginx 出发点就是一个 HTTP 的服务，一个纯粹做 HTTP 协议的服�
 * 启动 ```sudo nginx```
 * 关闭 Nginx ```sudo nginx -s stop```
 * 重新加载 Nginx ```sudo nginx -s reload```
+* 检查 nginx 配置文件 ```sudo nginx -t```
 
 ## 修改 hosts 文件配置本地域名
 
